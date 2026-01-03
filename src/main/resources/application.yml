@@ -1,0 +1,19 @@
+server:
+  port: 8080 # Cổng mà ứng dụng sẽ chạy (mặc định là 8080)
+
+spring:
+  application:
+    name: backend-service # Tên định danh của ứng dụng
+  profiles:
+    active: @spring.profiles.active@ # Lấy cấu hình môi trường (dev, test, prod) từ file pom.xml hoặc build.gradle
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*' # Mở tất cả các cổng giám sát (Actuator) để kiểm tra tình trạng hệ thống
+
+logging:
+  level:
+    root: INFO # Mức độ ghi log hệ thống: Chỉ hiện thông tin chung, bỏ qua log chi tiết (DEBUG)
+    web: INFO  # Mức độ ghi log cho các hoạt động liên quan đến Web/API

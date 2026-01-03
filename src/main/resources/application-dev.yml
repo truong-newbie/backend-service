@@ -1,0 +1,38 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  devtools:
+    add-properties: true
+
+  # Chú ý: datasource và jpa phải nằm dưới spring
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres  # Thường mặc định là postgres, không phải root
+    password: "123456789"
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    # Phải đổi Dialect sang PostgreSQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true # Nên để true khi dev để dễ debug
+    properties:
+      hibernate:
+        format_sql: true
+
+# Các cấu hình khác giữ nguyên nhưng phải đúng thụt lề
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+openapi:
+  service:
+    api-docs: backend-service
+    server: http://localhost:${server.port}
+    title: Backend service
+    version: 1.0.0
