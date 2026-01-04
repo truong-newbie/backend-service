@@ -1,5 +1,6 @@
 package vn.tayjava.backend_service.exception;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +17,7 @@ import java.util.Date;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @RestControllerAdvice
+@Hidden
 public class GlobalException {
 
     @ExceptionHandler(ResourceNotFoundException.class)

@@ -1,5 +1,7 @@
 package vn.tayjava.backend_service.config;
 
+import com.sendgrid.SendGrid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class AppConfig {
+
+    @Value("${spring.sendgrid.api-key}")
+    private String apiKey;
 
     // khoi tao spring web security
     @Bean
@@ -35,6 +40,12 @@ public class AppConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+
+    @Bean
+    public SendGrid sendgrid(){
+        return new SendGrid(apiKey);
     }
 
 

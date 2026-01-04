@@ -22,7 +22,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
+  sendgrid:
+    apiKey: ${SendGridApiKey}
+    from-email: ${FromEmail}
 # Các cấu hình khác giữ nguyên nhưng phải đúng thụt lề
 springdoc:
   api-docs:
@@ -36,3 +38,5 @@ openapi:
     server: http://localhost:${server.port}
     title: Backend service
     version: 1.0.0
+
+
