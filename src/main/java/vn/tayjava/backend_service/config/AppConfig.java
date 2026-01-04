@@ -27,7 +27,6 @@ import vn.tayjava.backend_service.service.UserServiceDetail;
 public class AppConfig {
     private final CustomizeRequestFilter requestFilter;
     private final UserServiceDetail userServiceDetail;
-    private final AuthenticationProvider authenticationProvider;
 
     @Value("${spring.sendgrid.api-key}")
     private String apiKey;
@@ -38,8 +37,8 @@ public class AppConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated())
-                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider).addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//                .authenticationProvider(authenticationProvider).addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

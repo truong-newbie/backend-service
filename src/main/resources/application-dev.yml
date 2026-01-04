@@ -34,6 +34,13 @@ springdoc:
   swagger-ui:
     enabled: true
 
+jwt:
+  expiryMinutes: 5
+  expiryDay: 14
+  accessKey: ZC0Qq7m/gEvdJNftWRnj0aP7Y0EAlNL2nNpbsL4kGEA=
+  refreshKey: uezYVL3Zu9Erf3apLHLhx65hca+FQ+rtLMn1EerJSpw=
+
+
 openapi:
   service:
     api-docs: backend-service

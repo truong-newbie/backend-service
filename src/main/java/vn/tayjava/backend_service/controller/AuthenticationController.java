@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.tayjava.backend_service.controller.request.SignInRequest;
 import vn.tayjava.backend_service.controller.response.TokenResponse;
+import vn.tayjava.backend_service.service.AuthenticationService;
 
 @RestController
 @RequestMapping("/auth")
@@ -19,14 +20,17 @@ import vn.tayjava.backend_service.controller.response.TokenResponse;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
+    private final AuthenticationService authenticationService;
+
     @Operation(summary = "Access token" , description = "Get access token and refresh token by username and password")
     @PostMapping("/access-token")
     public TokenResponse getAccessToken(@RequestBody SignInRequest request){
         log.info("Access token request");
-        return TokenResponse.builder()
-                .accessToken("DUMMY-ACCESS-TOKEN")
-                        .refreshToken("DUMMY-REFRESH-TOKEN")
-                .build();
+//        return TokenResponse.builder()
+//                .accessToken("DUMMY-ACCESS-TOKEN")
+//                        .refreshToken("DUMMY-REFRESH-TOKEN")
+//                .build();
+        return authenticationService.getAccessToken(request);
 
     }
 
