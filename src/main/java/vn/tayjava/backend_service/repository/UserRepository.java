@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import vn.tayjava.backend_service.model.UserEntity;
 
+import java.util.Optional;
+
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
@@ -15,4 +17,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "or lower(u.lastName) like :keyword or lower(u.username) like :keyword  or lower(u.phone) like :keyword )")
     Page<UserEntity> searchByKeyword(String keyword,
                                      Pageable pageable);
+
+    Optional<UserEntity> findByUsername(String username);
+
 }
