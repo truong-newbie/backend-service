@@ -22,4 +22,10 @@ public class EmailController {
         emailService.send(to, subject,content);
         log.info("Email sent");
     }
+
+    @GetMapping("/verify-email")
+    public void emailVerification(@RequestParam String to, String name) throws IOException {
+        log.info("verifying email to {}", to);
+        emailService.emailVerification(to, name);
+    }
 }

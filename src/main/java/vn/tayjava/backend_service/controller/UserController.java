@@ -2,26 +2,23 @@ package vn.tayjava.backend_service.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
-import org.apache.coyote.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.tayjava.backend_service.common.Gender;
 import vn.tayjava.backend_service.controller.request.UserCreationRequest;
 import vn.tayjava.backend_service.controller.request.UserUpdatePassword;
 import vn.tayjava.backend_service.controller.request.UserUpdateRequest;
-import vn.tayjava.backend_service.controller.response.UserPageResponse;
 import vn.tayjava.backend_service.controller.response.UserResponse;
 import vn.tayjava.backend_service.service.UserService;
 
-import java.util.Date;
+import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.List;
+
 import java.util.Map;
 
 @RestController
@@ -96,6 +93,19 @@ public class UserController {
         result.put("message", "password updated successfully ");
         result.put("data", "blank");
         return result;
+    }
+
+    @GetMapping("/confirm-email")
+    public void confirmEmail(@RequestParam String secretCode , HttpServletResponse response) throws IOException {
+        log.info("Confirm email" , secretCode);
+        try{
+            //todo check or compare secretCode from database
+
+        }catch(Exception e){
+            log.error("confirm email was failure! , errorMessage={}", e.getMessage());
+        }finally {
+            response.sendRedirect("http://homepage.vn");
+        }
     }
 
     @Operation(summary = " delete user", description = "API activate user")

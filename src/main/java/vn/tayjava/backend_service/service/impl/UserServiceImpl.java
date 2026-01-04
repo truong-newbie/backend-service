@@ -22,9 +22,11 @@ import vn.tayjava.backend_service.model.AddressEntity;
 import vn.tayjava.backend_service.model.UserEntity;
 import vn.tayjava.backend_service.repository.AddressRepository;
 import vn.tayjava.backend_service.repository.UserRepository;
+import vn.tayjava.backend_service.service.EmailService;
 import vn.tayjava.backend_service.service.UserService;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public UserPageResponse findAll(String keyword, String sort, int page, int size) {
@@ -141,6 +144,13 @@ public class UserServiceImpl implements UserService {
             addressRepository.saveAll(addresses);
             log.info("Saved addresses: {}", addresses);
         }
+
+        //send email
+        try {
+            emailService.emailVerification(req.getEmail(), req.getUsername());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return user.getId();
 
     }
@@ -184,6 +194,7 @@ public class UserServiceImpl implements UserService {
             addresses.add(addressEntity);
         });
         addressRepository.saveAll(addresses);
+
         //set data
 
         //save to db

@@ -25,6 +25,8 @@ spring:
   sendgrid:
     apiKey: ${SendGridApiKey}
     from-email: ${FromEmail}
+    templateId: d-e889613106aa4f0094ca137eac6e1470
+    verificationLink: http://localhost:8080/user/confirm-email
 # Các cấu hình khác giữ nguyên nhưng phải đúng thụt lề
 springdoc:
   api-docs:
