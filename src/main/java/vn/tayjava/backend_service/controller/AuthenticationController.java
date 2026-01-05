@@ -13,6 +13,8 @@ import vn.tayjava.backend_service.controller.request.SignInRequest;
 import vn.tayjava.backend_service.controller.response.TokenResponse;
 import vn.tayjava.backend_service.service.AuthenticationService;
 
+import java.nio.file.AccessDeniedException;
+
 @RestController
 @RequestMapping("/auth")
 @Slf4j(topic="AUTHENTICATION-CONTROLLER")
@@ -24,7 +26,7 @@ public class AuthenticationController {
 
     @Operation(summary = "Access token" , description = "Get access token and refresh token by username and password")
     @PostMapping("/access-token")
-    public TokenResponse getAccessToken(@RequestBody SignInRequest request){
+    public TokenResponse getAccessToken(@RequestBody SignInRequest request) throws AccessDeniedException {
         log.info("Access token request");
 //        return TokenResponse.builder()
 //                .accessToken("DUMMY-ACCESS-TOKEN")
