@@ -3,82 +3,81 @@ package vn.tayjava.backend_service.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import vn.tayjava.backend_service.common.Gender;
 import vn.tayjava.backend_service.common.UserStatus;
 import vn.tayjava.backend_service.common.UserType;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @Entity
-@Table(name="tbl_user")
-public class UserEntity implements UserDetails, Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Long id;
+@Table(name = "tbl_user")
+public class UserEntity extends AbstractEntity<Long> implements UserDetails, Serializable {
 
-    @Column(name="first_name" , length=255)
+
+    @Column(name = "first_name", length = 255)
     private String firstName;
 
-    @Column(name="last_name" , length=255)
+    @Column(name = "last_name", length = 255)
     private String lastName;
 
-    @Column(name="phone" , length=15)
+    @Column(name = "phone", length = 15)
     private String phone;
 
-    @Column(name="email" , length=255)
+    @Column(name = "email", length = 255)
     private String email;
 
-    @Column(name="username" , unique=true, nullable = false , length=255)
+    @Column(name = "username", unique = true, nullable = false, length = 255)
     private String username;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name="gender" )
+    @Column(name = "gender")
     private Gender gender;
 
     @Temporal(TemporalType.DATE)
-    @Column(name="date_of_birth" )
+    @Column(name = "date_of_birth")
     private Date birthday;
 
-    @Column(name="password" , length=255)
+    @Column(name = "password", length = 255)
     private String password;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name="type" , length=255)
+    @Column(name = "type", length = 255)
     private UserType type;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name="status" , length=255)
+    @Column(name = "status", length = 255)
     private UserStatus status;
 
-    @Column(name="created_at" , length=255)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    private Date createdAt;
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<UserHasRole> roles= new HashSet<>();
 
-    @Column(name="updated_at" , length=255)
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
-    private Date updatedAt;
+    @OneToMany(mappedBy = "user")
+    private Set<GroupHasUser> groups= new HashSet<>();
+
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        //b1: get role
+        List<Role> roleList=roles.stream().map(UserHasRole::getRole).toList();
+
+        //b2:get role name
+        List<String> roleNames= roleList.stream().map(Role::getName).toList();
+        //b3: add role name to authority
+//        return roleNames.stream().map(SimpleGrantedAuthority::new).toList();
+        return roleNames.stream().map(s-> new SimpleGrantedAuthority("ROLE_"+ s.toUpperCase())).toList();
     }
 
     @Override

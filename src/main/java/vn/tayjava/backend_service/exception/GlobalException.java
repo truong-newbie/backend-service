@@ -90,4 +90,6 @@ public class GlobalException {
         private String error;
         private String message;
     }
+
+
 }

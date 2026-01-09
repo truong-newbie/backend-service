@@ -16,6 +16,9 @@ import vn.tayjava.backend_service.repository.UserRepository;
 import vn.tayjava.backend_service.service.AuthenticationService;
 import vn.tayjava.backend_service.service.JwtService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j(topic = "AUTHENTICATION-SERVICE")
@@ -30,32 +33,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         log.info("get access token");
 
         try {
+
+            //thuc hien xac thuc voi username va password
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
                             request.getPassword()
                     )
             );
+
+            // neu xac thuc thanh cong, luu thong itn vao securityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (AuthenticationException e) {
             log.error("Login failed: {}", e.getMessage());
             throw new AccessDeniedException("Invalid username or password");
         }
-
+        //get user
         var user = userRepository.findByUsername(request.getEmail())
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found"));
 
+
+        List<String> authorities= new ArrayList<>();
+        user.getAuthorities().forEach(authority -> authorities.add(authority.getAuthority()));
+
         String accessToken = jwtService.generateAccessToken(
-                user.getId(),
                 user.getUsername(),
-                user.getAuthorities()
+                authorities
         );
 
         String refreshToken = jwtService.generateRefreshToken(
-                user.getId(),
                 user.getUsername(),
-                user.getAuthorities()
+                authorities
         );
 
         return TokenResponse.builder()

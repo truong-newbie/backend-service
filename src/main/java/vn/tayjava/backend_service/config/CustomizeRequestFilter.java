@@ -10,7 +10,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +32,8 @@ import java.util.Date;
 @Component
 @Slf4j(topic ="CUSTOMIZE-REQUEST-FILTER")
 @RequiredArgsConstructor
+@EnableMethodSecurity
+@Configuration
 public class CustomizeRequestFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -38,6 +43,8 @@ public class CustomizeRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("{} {}",request.getMethod(),request.getRequestURI());
 
+
+        // TODO : check authority by request url
         String authHeader= request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer")) {
             authHeader = authHeader.substring(7);

@@ -6,18 +6,16 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @Entity
 @Table(name="tbl_address")
-public class AddressEntity {
+public class AddressEntity extends AbstractEntity<Integer> implements  Serializable{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Long id;
+
 
     @Column(name="apartment_number")
     private String apartmentNumber;
@@ -46,13 +44,5 @@ public class AddressEntity {
     @Column(name="address_type")
     private Integer addressType;
 
-    @Column(name="created_at" , length=255)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    private Date createdAt;
 
-    @Column(name="updated_at" , length=255)
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
-    private Date updatedAt;
 }
