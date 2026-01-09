@@ -121,11 +121,11 @@ public class UserServiceImpl implements UserService {
         user.setType(req.getType());
         user.setStatus(UserStatus.NONE);
 
-        userRepository.save(user);
+        UserEntity result= userRepository.save(user);
         log.info("saved user:{}", user);
 
         if (user.getId() != null) {
-            log.info("userid {}", user.getId());
+            log.info("userid {}", result.getId());
             List<AddressEntity> addresses = new ArrayList<>();
             req.getAddresses().forEach(address -> {
                 AddressEntity addressEntity = new AddressEntity();
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
                 addressEntity.setCity(address.getCity());
                 addressEntity.setCountry(address.getCountry());
                 addressEntity.setAddressType(address.getAddressType());
-                addressEntity.setUserId(user.getId());
+                addressEntity.setUserId(result.getId());
                 addresses.add(addressEntity);
             });
 
@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return user.getId();
+        return result.getId();
 
     }
 

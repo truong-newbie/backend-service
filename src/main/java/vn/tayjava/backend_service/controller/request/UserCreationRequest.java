@@ -14,6 +14,7 @@ import java.util.List;
 
 @Getter
 @ToString
+@Setter
 public class UserCreationRequest implements Serializable {
     @NotBlank(message = "firstName must be not blank")
     private String firstName;
